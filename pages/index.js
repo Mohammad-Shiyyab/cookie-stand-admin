@@ -1,89 +1,125 @@
-import Head from "next/head"
-import { useState } from "react"
-import {replies} from '@/data'
-
-
-
-
+import Head from "next/head";
+import { useState } from "react";
 
 export default function Home() {
+  const [location, setLocation] = useState("");
+  const [minCustomers, setMinCustomers] = useState("");
+  const [maxCustomers, setMaxCustomers] = useState("");
+  const [averageCookies, setAverageCookies] = useState("");
+  const [lastCreatedStand, setLastCreatedStand] = useState(null);
 
-  const [question, serQuestion ] = useState('no question yet ')
-  const [answer, setAnswer] = useState('no answer yet ')
+  function submitHandler(event) {
+    event.preventDefault();
+    if (location && minCustomers && maxCustomers && averageCookies) {
+      const newStand = {
+        location,
+        minCustomers: parseInt(minCustomers),
+        maxCustomers: parseInt(maxCustomers),
+        averageCookies: parseInt(averageCookies),
+      };
 
-
-  function submitHandler(event){
-    event.preventDefault()
-
-    serQuestion(event.target.question.value)
-  
-
-  const randomNum = Math.floor(Math.random()*replies.length)
-  setAnswer(replies[randomNum])
-    
-
-
+      setLastCreatedStand(newStand);
+      setLocation("");
+      setMinCustomers("");
+      setMaxCustomers("");
+      setAverageCookies("");
+    }
   }
-
 
   return (
     <>
-      <head>
-        <title>Cookie Stand Admin</title>
-      </head>
-      <body className="flex flex-col min-h-screen">
-        {/* Header*/}
+      <Head>
+        <title>Cookie Stand Form</title>
+      </Head>
+      <div className="flex flex-col min-h-screen bg-gray-100">
         <Header />
         <main className="flex flex-col items-center py-4 space-y-8 flex-grow">
-          {/* form */}
-          <Form  handler={submitHandler}/>
-          {/* question section  */}
-          <Question  question={question}/>
-          <p>{answer}</p>
-
+          <div className="bg-green-500 p-4 text-white text-center mb-4">
+            <h2 className="text-2xl font-bold">Add New Cookie Stand</h2>
+          </div>
+          <Form
+            submitHandler={submitHandler}
+            location={location}
+            minCustomers={minCustomers}
+            maxCustomers={maxCustomers}
+            averageCookies={averageCookies}
+            lastCreatedStand={lastCreatedStand}
+            setLocation={setLocation}
+            setMinCustomers={setMinCustomers}
+            setMaxCustomers={setMaxCustomers}
+            setAverageCookies={setAverageCookies}
+          />
         </main>
-        <footer className="p-4 mt-8 bg-gray-500 text-gray-50" >
-          &copy; ASAC 2023
-        </footer>
-      </body >
-
+        <Footer />
+      </div>
     </>
-  )
-
-
+  );
 }
 
 function Header() {
   return (
-    <header className="flex items-center justify-between p-4 bg-gray-500 text-gray-50">
-
-      <h1 className="text-4xl">Magic Ball</h1>
-      <p>1 question answered</p>
-
+    <header className="bg-green-500 p-4 text-white text-center">
+      <h2 className="text-4xl">Cookie Stand Admin</h2>
     </header>
-
-  )
+  );
 }
 
 function Form(props) {
   return (
-    <form className="flex w-1/2 p-2  mx-auto my-4 bg-gray-200" onSubmit={props.handler}>
-      <input name='question' className="flex-auto pl-1" />
-      <button className="px-2 py-1 bg-gray-500 text-gray-50 " >Ask</button>
+    <form
+      className="flex flex-col w-full md:w-1/2 p-4 mx-auto bg-white shadow-md rounded-lg"
+      onSubmit={props.submitHandler}
+    >
+      <input
+        name="location"
+        placeholder="Location"
+        value={props.location}
+        className="p-3 m-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        onChange={(e) => props.setLocation(e.target.value)}
+      />
+      <input
+        name="minCustomers"
+        type="number"
+        placeholder="Min Customers per Hour"
+        value={props.minCustomers}
+        className="p-3 m-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        onChange={(e) => props.setMinCustomers(e.target.value)}
+      />
+      <input
+        name="maxCustomers"
+        type="number"
+        placeholder="Max Customers per Hour"
+        value={props.maxCustomers}
+        className="p-3 m-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        onChange={(e) => props.setMaxCustomers(e.target.value)}
+      />
+      <input
+        name="averageCookies"
+        type="number"
+        placeholder="Average Cookies per Sale"
+        value={props.averageCookies}
+        className="p-3 m-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        onChange={(e) => props.setAverageCookies(e.target.value)}
+      />
+      {props.lastCreatedStand && (
+        <div className="bg-white p-3 m-2 border rounded-lg">
+          <pre>{JSON.stringify(props.lastCreatedStand, null, 2)}</pre>
+        </div>
+      )}
+      <button
+        className="px-4 py-2 bg-green-500 text-white rounded-lg"
+        type="submit"
+      >
+        Create
+      </button>
     </form>
-  )
+  );
 }
 
-function Question(props) {
+function Footer() {
   return (
-    <div className="mx-auto my-4 bg-gray-900 rounded-full w-96 h-96">
-      <div className="relative flex items-center justify-center w-48 h-48 rounded-full bg-gray-50 top-16 left-16">
-        <p className="text-xl text-center">{props.question}</p>
-      </div>
-    </div>
-
-  )
+    <footer className="bg-green-500 p-4 text-white text-center">
+      &copy; Mohammad - Alshiyab 2023
+    </footer>
+  );
 }
-
-
-// export default Home;

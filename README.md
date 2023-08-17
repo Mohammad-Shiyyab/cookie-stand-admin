@@ -24,16 +24,5 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 npm run dev
 ```
 
-to login use the following credentials
 
-```
-username: asac-test
-password: asacltuc
-```
-or
 
-```
-username: emam
-password: 1020
-```
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
